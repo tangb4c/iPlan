@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="@dimen/main_nav_width"
+              android:layout_height="match_parent"
+              android:gravity="center_horizontal"
+              android:paddingTop="4dp"
+              android:paddingBottom="10dp"
+              android:background="@drawable/tab_bg">
+
+    <TextView
+            style="@style/main_nav_menu"
+            android:text="登录"
+            android:drawableTop="@drawable/tab_ic_login_default"
+            />
+
+    <TextView
+            style="@style/main_nav_menu"
+            android:text="愿望列表"
+            android:drawableTop="@drawable/tab_ic_home_default"
+            />
+
+    <TextView
+            style="@style/main_nav_menu"
+            android:text="我的历程"
+            android:drawableTop="@drawable/tab_ic_achieve_default"
+            />
+
+    <TextView
+            style="@style/main_nav_menu"
+            android:text="发现愿望"
+            android:drawableTop="@drawable/tab_ic_discover_default"
+            />
+
+    <TextView
+            style="@style/main_nav_menu"
+            android:text="关注动态"
+            android:drawableTop="@drawable/tab_ic_follow_default"
+            />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/tab_ic_setting_default"/>
+    </RelativeLayout>
+</LinearLayout>

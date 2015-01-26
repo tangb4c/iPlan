@@ -7,4 +7,6 @@
     <color name="plan_title_color">#2b2b2b</color>
     <!-- 半透明 -->
     <color name="halfTransparent">#DDFFFFFF</color>
+    <!-- 主菜单文字颜色 -->
+    <color name="nav_title_color">#fefefe</color>
 </resources>

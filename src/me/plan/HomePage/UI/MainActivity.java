@@ -8,29 +8,35 @@ import android.widget.ImageView;
 import me.plan.R;
 
 public class MainActivity extends Activity implements View.OnClickListener {
+    NavMenuWidget menu;
     /**
      * Called when the activity is first created.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initView();
+        initUI();
     }
 
-    private void initView() {
+    private void initUI() {
+        menu = new NavMenuWidget(this);
         setContentView(R.layout.main);
         ImageView btnIcMore = (ImageView) findViewById(R.id.btn_ic_more);
         btnIcMore.setOnClickListener(this);
+        ImageView navMenu = (ImageView) findViewById(R.id.menu_nav);
+        navMenu.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-        case R.id.btn_ic_more:
+            case R.id.menu_nav:
+                menu.showMenu();
+                break;
+            case R.id.btn_ic_more:
             showIcMoreDialog();
             break;
-        default:
-
+            default:
         }
     }
 

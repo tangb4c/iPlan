@@ -29,7 +29,7 @@
     </LinearLayout>
 
     <LinearLayout
-            android:layout_width="275dp"
+            android:layout_width="258dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
@@ -70,15 +70,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:paddingRight="10dp"
-                    android:paddingLeft="20dp"
+                    android:layout_marginRight="10dp"
                     android:src="@drawable/card_ic_more_default"/>
         </RelativeLayout>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="已留下6个精彩瞬间"
+                android:text="已留下6个努力瞬间"
                 android:textSize="12sp"
                 android:textColor="#acacac"
                 />

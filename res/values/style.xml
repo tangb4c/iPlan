@@ -23,4 +23,14 @@
         <item name="android:windowEnterAnimation">@anim/fading_in</item>
         <item name="android:windowExitAnimation">@anim/fading_out</item>
     </style>
+
+    <style name="main_nav_menu">
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:gravity">center|bottom</item>
+        <item name="android:textColor">@color/nav_title_color</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginTop">14dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 </resources>
