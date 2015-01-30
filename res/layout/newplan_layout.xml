@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/common_bgcolor"
+        >
+
+    <include layout="@layout/common_title_bar_layout"/>
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/title_nav_top"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="27dp"
+            android:paddingBottom="27dp"
+            android:background="#d9dfdd"
+            >
+
+        <EditText
+                android:id="@+id/plan_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textColor="#aaaaaa"
+                android:text="I'm here"
+                />
+    </FrameLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#e4eae8"
+            android:paddingTop="1dp"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            >
+
+        <me.plan.comm.Widget.AutoBgButton
+                android:id="@+id/template_title_a"
+                style="@style/newplan_tips"
+                android:text="地球一圈"/>
+        <me.plan.comm.Widget.AutoBgButton
+                android:id="@+id/template_title_b"
+                style="@style/newplan_tips"
+                android:text="每天365部电影"/>
+
+    </LinearLayout>
+    <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableLayout>
+</LinearLayout>
