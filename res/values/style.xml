@@ -10,11 +10,18 @@
         <item name="android:textSize">26sp</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
+
+    <style name="titleText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+    <!-- 修改对话框 -->
     <style name="popupDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item><!-- 是否悬浮在activity上 -->
         <item name="android:windowIsTranslucent">true</item><!-- 半透明 -->
-        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowBackground">@color/halfTransparent</item>
         <item name="android:backgroundDimEnabled">true</item><!-- 模糊 -->
         <item name="android:backgroundDimAmount">0.3</item><!-- 背景灰度比例 -->
         <item name="android:windowAnimationStyle">@style/dialog_animation</item>
@@ -32,5 +39,16 @@
         <item name="android:layout_marginTop">14dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="newplan_tips">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">13dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@drawable/tip_bg</item>
     </style>
 </resources>

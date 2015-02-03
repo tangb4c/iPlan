@@ -2,6 +2,54 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="@color/common_bgcolor"
+        >
+
+    <include layout="@layout/common_title_bar_layout"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/title_nav_top"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="27dp"
+            android:paddingBottom="27dp"
+            android:background="#d9dfdd"
+            android:orientation="vertical"
+            >
+
+        <TextView
+                android:id="@+id/plan_endtime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/button_bg_default"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:text="预计2015-01-21完成"
+                />
+        <me.plan.comm.Widget.AutoBgTextView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/secret_plan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                app:drawableLeft="@drawable/ic_secret_statlist"
+                android:drawablePadding="16sp"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:background="@android:color/white"
+                android:textColor="@android:color/black"
+                android:text="私密愿望"
+                />
+    </LinearLayout>
+<!--    <com.squareup.timessquare.CalendarPickerView
+            android:id="@+id/calendar_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />-->
 
 </LinearLayout>

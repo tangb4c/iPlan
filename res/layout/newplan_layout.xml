@@ -23,9 +23,11 @@
                 android:id="@+id/plan_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:background="@drawable/button_bg_default"
                 android:textColor="#aaaaaa"
-                android:text="I'm here"
+                android:text="去月球旅行"
                 />
     </FrameLayout>
 
@@ -48,7 +50,4 @@
                 android:text="每天365部电影"/>
 
     </LinearLayout>
-    <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></TableLayout>
 </LinearLayout>

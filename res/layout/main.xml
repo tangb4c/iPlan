@@ -5,119 +5,28 @@
               android:layout_height="fill_parent"
               android:background="@color/common_bgcolor"
               android:gravity="center_horizontal"
+              android:clipChildren="false"
         >
-    <LinearLayout
+
+    <include layout="@layout/common_title_bar_layout"
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginTop="@dimen/title_nav_top"
+             android:layout_marginBottom="@dimen/main_card_top_padding"
+            />
+    <me.plan.comm.Widget.WrapContentHeightViewPager
+            android:id="@+id/cardlist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="17dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
-        <ImageView
-                android:id="@+id/menu_nav"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/nav_ic_tab_default"/>
-        <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"></View>
-        <ImageView
-                android:id="@+id/new_plan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/nav_ic_add_default"/>
-    </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="258dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:background="@drawable/rectangle_shadow"
-            android:layout_marginTop="25dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="5dp"
-            android:paddingRight="13dp"
-            android:paddingLeft="8dp"
-            android:orientation="vertical"
-            >
-            <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    >
-                <ImageView
-                        android:layout_width="258dp"
-                        android:layout_height="258dp"
-                        android:layout_centerHorizontal="true"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/cat"/>
-            </RelativeLayout>
-        <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="23dp">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="养一只大猫"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/plan_title_color"
-                    android:layout_centerInParent="true"
-                    />
-            <ImageView
-                    android:id="@+id/btn_ic_more"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/card_ic_more_default"/>
-        </RelativeLayout>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="已留下6个努力瞬间"
-                android:textSize="12sp"
-                android:textColor="#acacac"
-                />
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                >
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="剩余  "
-                    style="@style/normalText"
-                    />
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#00bac3"
-                    style="@style/daysText"
-                    android:text="21"/>
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="/60"
-                    style="@style/daysText"
-                    />
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/normalText"
-                    android:text="  天"
-                    />
-        </LinearLayout>
-    </LinearLayout>
+            android:layout_marginLeft="@dimen/main_card_gap"
+            android:layout_marginRight="@dimen/main_card_gap"
+            android:clipChildren="false"
+            />
     <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
-    <ImageView
+    <me.plan.comm.Widget.AutoBgButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/home_ic_camera"

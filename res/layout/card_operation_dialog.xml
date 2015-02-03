@@ -2,43 +2,45 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
-              android:layout_width="260dp"
-              android:layout_height="wrap_content"
-              android:layout_marginRight="3dp"
-              android:paddingTop="12dp"
-              android:paddingRight="4dp"
-              android:paddingLeft="7dp"
-              android:paddingBottom="120dp"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginRight="@dimen/card_dialog_right_margin"
+              android:layout_marginLeft="@dimen/card_dialog_right_margin"
+              android:paddingTop="@dimen/card_dialog_top_margin"
         >
-        <ImageView
-                android:id="@+id/card_dialog_close"
-                android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                android:src="@drawable/more_ic_close_default"
-                android:layout_gravity="right"
-                />
-        <ImageView
-                android:id="@+id/card_dialog_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/more_ic_edit_default"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="58dp"
-        />
-    <ImageView
+
+    <me.plan.comm.Widget.AutoBgButton
+            android:id="@+id/card_dialog_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/more_ic_close_default"
+            android:layout_gravity="right"
+            />
+
+    <me.plan.comm.Widget.AutoBgButton
+            android:id="@+id/card_dialog_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/more_ic_edit_default"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="58dp"
+            />
+
+    <me.plan.comm.Widget.AutoBgButton
             android:id="@+id/card_dialog_finish"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/more_ic_finish_default"
+            android:background="@drawable/more_ic_finish_default"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="27dp"
             />
-    <ImageView
+
+    <me.plan.comm.Widget.AutoBgButton
             android:id="@+id/card_dialog_abandon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/more_ic_abandon_default"
+            android:background="@drawable/more_ic_abandon_default"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="27dp"
             />
 </LinearLayout>

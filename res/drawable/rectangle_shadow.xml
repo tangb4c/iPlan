@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 第三层卡片 -->
     <item android:left="10dp" android:right="15dp" android:top="0dp" android:bottom="5dp">
         <shape android:shape="rectangle">
             <solid android:color="@color/card_3rd_shadow_color" />
         </shape>
     </item>
+    <!-- 第二层卡片 -->
     <item android:left="5dp" android:right="10dp" android:top="5dp" android:bottom="5dp">
         <shape android:shape="rectangle">
             <solid android:color="@color/card_2nd_shadow_color" />
         </shape>
     </item>
-
+    <!-- 阴影 -->
     <item android:left="5dp" android:top="15dp">
         <shape android:shape="rectangle">
             <solid android:color="@color/card_shadow_color"/>
@@ -20,6 +22,7 @@
                       ></gradient>
         </shape>
     </item>
+    <!-- 第一层卡片 -->
     <item android:left="0dp" android:right="5dp" android:top="10dp" android:bottom="5dp" >
         <shape android:shape="rectangle">
             <solid android:color="@android:color/white"/>

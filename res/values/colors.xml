@@ -9,4 +9,6 @@
     <color name="halfTransparent">#DDFFFFFF</color>
     <!-- 主菜单文字颜色 -->
     <color name="nav_title_color">#fefefe</color>
+    <!-- 是否私密愿望 -->
+    <color name="secret_color">#32C6B6</color>
 </resources>

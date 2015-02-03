@@ -15,4 +15,7 @@ public class Utils {
     static public final int dimen2px(int dimenId) {
         return Global.getContext().getResources().getDimensionPixelSize(dimenId);
     }
+    static public boolean isEmpty(String str){
+        return str == null || str.isEmpty();
+    }
 }

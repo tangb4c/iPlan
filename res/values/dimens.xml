@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="main_nav_width">145dp</dimen>
+    <dimen name="main_cardlist_gap">6dp</dimen>
+    <!-- 卡片背景 -->
+    <dimen name="main_card_gap">23dp</dimen>
+
+    <dimen name="title_nav_top">17dp</dimen>
+    <dimen name="main_card_top_margin">25dp</dimen>
+    <!-- 三个5dp组成，由背景中的层叠 -->
+    <dimen name="main_card_top_padding">15dp</dimen>
+    <!-- -->
+    <dimen name="main_card_right_padding">13dp</dimen>
+    <!-- main_card_top_margin + title_nav_top + 50dp(icon height) + main_card_top_padding + 16dp(与上部图片的边界) -->
+    <dimen name="card_dialog_top_margin">98dp</dimen>
+    <!-- main_card_gap + main_card_right_padding -->
+    <dimen name="card_dialog_right_margin">36dp</dimen>
 </resources>

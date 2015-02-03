@@ -1,7 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:background="@drawable/rectangle_shadow"
+        android:paddingTop="@dimen/main_card_top_padding"
+        android:paddingBottom="5dp"
+        android:paddingRight="@dimen/main_card_right_padding"
+        android:paddingLeft="8dp"
+        android:orientation="vertical"
+        >
 
+    <me.plan.comm.Widget.SquareRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+        <ImageView
+                android:id="@+id/card_item_cover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/cat"/>
+
+        <TextView
+                android:id="@+id/card_item_recodtime"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:textSize="14dp"
+                android:text="最后记录:2014-2-1"
+                android:textColor="#AABFBEBA"
+                android:gravity="right|center_vertical"
+                android:background="#3FAAAAAA"
+                android:paddingRight="5dp"
+                android:layout_alignBottom="@id/card_item_cover"/>
+    </me.plan.comm.Widget.SquareRelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp">
+
+        <TextView
+                android:id="@+id/card_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="养一只大猫"
+                style="@style/titleText"
+                android:textColor="@color/plan_title_color"
+                android:layout_centerInParent="true"
+                />
+
+        <me.plan.comm.Widget.AutoBgButton
+                android:id="@+id/btn_ic_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/card_ic_more_default"/>
+    </RelativeLayout>
+
+    <TextView
+            android:id="@+id/card_item_brief"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="已留下6个努力瞬间"
+            android:textSize="12sp"
+            android:textColor="#acacac"
+            />
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            >
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="剩余  "
+                style="@style/normalText"
+                />
+
+        <TextView
+                android:id="@+id/card_item_pastdays"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#00bac3"
+                style="@style/daysText"
+                android:text="21"/>
+
+        <TextView
+                android:id="@+id/card_item_totaldays"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="/60"
+                style="@style/daysText"
+                />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/normalText"
+                android:text="  天"
+                />
+    </LinearLayout>
 </LinearLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="@dimen/main_nav_width"
               android:layout_height="match_parent"
@@ -8,34 +9,35 @@
               android:paddingBottom="10dp"
               android:background="@drawable/tab_bg">
 
-    <TextView
+    <me.plan.comm.Widget.AutoBgTextView
+            android:id="@+id/nav_login"
             style="@style/main_nav_menu"
             android:text="登录"
-            android:drawableTop="@drawable/tab_ic_login_default"
+            app:drawableTop="@drawable/tab_ic_login_default"
             />
 
-    <TextView
+    <me.plan.comm.Widget.AutoBgTextView
             style="@style/main_nav_menu"
             android:text="愿望列表"
-            android:drawableTop="@drawable/tab_ic_home_default"
+            app:drawableTop="@drawable/tab_ic_home_default"
             />
 
-    <TextView
+    <me.plan.comm.Widget.AutoBgTextView
             style="@style/main_nav_menu"
             android:text="我的历程"
-            android:drawableTop="@drawable/tab_ic_achieve_default"
+            app:drawableTop="@drawable/tab_ic_achieve_default"
             />
 
-    <TextView
+    <me.plan.comm.Widget.AutoBgTextView
             style="@style/main_nav_menu"
             android:text="发现愿望"
-            android:drawableTop="@drawable/tab_ic_discover_default"
+            app:drawableTop="@drawable/tab_ic_discover_default"
             />
 
-    <TextView
+    <me.plan.comm.Widget.AutoBgTextView
             style="@style/main_nav_menu"
             android:text="关注动态"
-            android:drawableTop="@drawable/tab_ic_follow_default"
+            app:drawableTop="@drawable/tab_ic_follow_default"
             />
 
     <View
@@ -48,10 +50,10 @@
             android:layout_height="wrap_content"
             >
 
-        <ImageView
+        <me.plan.comm.Widget.AutoBgButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:src="@drawable/tab_ic_setting_default"/>
+                android:background="@drawable/tab_ic_setting_default"/>
     </RelativeLayout>
 </LinearLayout>
