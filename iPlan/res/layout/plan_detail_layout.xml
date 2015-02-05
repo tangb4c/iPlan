@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="@color/common_bgcolor"
+        >
     <include layout="@layout/common_title_bar_layout"/>
-
+    <com.ecloud.pulltozoomview.PullToZoomListViewEx
+            android:id="@+id/planlistview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/title_nav_top"
+            app:headerView="@layout/plan_detail_head_view_layout"
+            app:zoomView="@layout/plan_detail_head_zoom_view" />
 </LinearLayout>

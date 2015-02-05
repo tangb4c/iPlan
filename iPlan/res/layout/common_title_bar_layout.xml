@@ -19,6 +19,14 @@
             android:textSize="14dp"
             android:textColor="#bebebe"
             android:layout_weight="1"/>
+<me.plan.comm.Widget.AutoBgButton
+        android:id="@+id/right_btn_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/nav_ic_eidt_default"
+        android:visibility="gone"
+        />
     <me.plan.comm.Widget.AutoBgButton
             android:id="@+id/right_btn"
             android:layout_width="wrap_content"

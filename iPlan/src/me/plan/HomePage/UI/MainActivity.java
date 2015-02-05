@@ -101,6 +101,8 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
         mCardListPager.setOffscreenPageLimit(3);
         mCardListPager.setPageMargin(Utils.dimen2px(R.dimen.main_cardlist_gap));
 
+        TextView camera = (TextView) findViewById(R.id.camera);
+        camera.setOnClickListener(this);
     }
 
     @Override
@@ -115,8 +117,16 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
         case R.id.btn_ic_more:
             showIcMoreDialog();
             break;
+        case R.id.camera:
+            gotoPlanDetail();
+            break;
         default:
         }
+    }
+
+    private void gotoPlanDetail() {
+        Intent intent = new Intent(this, PlanDetailActivity.class);
+        startActivity(intent);
     }
 
     private void gotoAddPlan() {

@@ -1,9 +1,8 @@
 package me.plan.comm.base;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,23 +11,20 @@ import me.plan.comm.Widget.AutoBgButton;
 import me.plan.core.TLog;
 
 /**
- * Created by tangb4c on 2015/1/30.
+ * Created by tangb4c on 2015/2/6.
  */
-public abstract class CommonActivity extends Activity {
+public class CommonActionBarActivity extends ActionBarActivity {
     protected AutoBgButton mLeftTitleBtn;
-    protected AutoBgButton mRightTitleBtn, mRightTitleBtn2;
+    protected AutoBgButton mRightTitleBtn;
     protected TextView mMiddleTitleTextView;
     protected void onCreate(Bundle savedInstanceState, int layoutResID) {
         super.onCreate(savedInstanceState);
         setContentView(layoutResID);
 
         mLeftTitleBtn = (AutoBgButton) findViewById(R.id.left_btn);
-//        mLeftTitleBtn.setBackgroundResource(R.drawable.nav_ic_tab_default);
-        mRightTitleBtn2 = (AutoBgButton) findViewById(R.id.right_btn_2);
-//        mRightTitleBtn2.setBackgroundResource(R.drawable.nav_ic_eidt_default);
-
+        mLeftTitleBtn.setBackgroundResource(R.drawable.nav_ic_tab_default);
         mRightTitleBtn = (AutoBgButton) findViewById(R.id.right_btn);
-//        mRightTitleBtn.setBackgroundResource(R.drawable.nav_ic_add_default);
+        mRightTitleBtn.setBackgroundResource(R.drawable.nav_ic_add_default);
         mMiddleTitleTextView = (TextView) findViewById(R.id.middle_title);
     }
 

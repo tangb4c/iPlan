@@ -24,5 +24,6 @@
 
         </activity>
         <activity android:name=".HomePage.UI.NewPlanDetailActivity"/>
+        <activity android:name=".HomePage.UI.PlanDetailActivity"/>
     </application>
 </manifest>
