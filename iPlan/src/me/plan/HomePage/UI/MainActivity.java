@@ -1,20 +1,21 @@
 package me.plan.HomePage.UI;
 
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Debug;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
-import com.loopj.android.http.JsonHttpResponseHandler;
+import android.widget.Toast;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
-import me.plan.HomePage.business.HomePageBusiness;
 import me.plan.HomePage.data.PlanInfo;
 import me.plan.HomePage.data.PlanListRsp;
 import me.plan.R;
@@ -27,25 +28,28 @@ import me.plan.core.LoginUser;
 import me.plan.core.TLog;
 import me.plan.core.network.BlkNetWorker;
 import org.apache.http.Header;
-import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.logging.SimpleFormatter;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends CommonActivity implements View.OnClickListener {
+    private static final int REQUEST_CROP = 1, REQUEST_TAKEPICTURE = 2;
     NavMenuWidget mNavMenu;
     ViewPager mCardListPager;
     CardListPagerAdapter mCardAdapter;
+    Uri mPictureUri;
+    boolean clicked = false;
 
     /**
      * Called when the activity is first created.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.main);
+        super.onCreate(savedInstanceState, R.layout.plan_main_list);
 //        Debug.waitForDebugger();
         initData();
         initUI();
@@ -118,7 +122,12 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
             showIcMoreDialog();
             break;
         case R.id.camera:
-            gotoPlanDetail();
+            //gotoPlanDetail();
+            if(clicked)
+                gotoPlanDetail();
+            else
+                takePicture();
+            clicked = !clicked;
             break;
         default:
         }
@@ -155,6 +164,58 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
 
         dialog.show();
     }
+    private void photoPicker() {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, 1);
+    }
+    private void takePicture(){
+        final File dcim = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        if(!dcim.exists()){
+            dcim.mkdirs();
+        }
+/*        SimpleDateFormat dateFormat = new SimpleDateFormat("iplan_yyyy_MM_dd.jpg");
+        String imageFilePath = dcim.getAbsolutePath()+dateFormat.format(Calendar.getInstance());
+        File file = new File(imageFilePath); //创建一个文件
+        Uri imageUri = Uri.fromFile(file);*/
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//这里我们插入一条数据，ContentValues是我们希望这条记录被创建时包含的数据信息
+//这些数据的名称已经作为常量在MediaStore.Images.Media中,有的存储在MediaStore.MediaColumn中了
+//ContentValues values = new ContentValues();
+        ContentValues values = new ContentValues(3);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
+        String fileName = "iplan_" + dateFormat.format(new Date()) + ".jpg";
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+        values.put(MediaStore.Images.Media.DESCRIPTION, "iplan app image");
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        mPictureUri = MainActivity.this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mPictureUri);
+//这样就将文件的存储方式和uri指定到了Camera应用中
+//由于我们需要调用完Camera后，可以返回Camera获取到的图片，
+//所以，我们使用startActivityForResult来启动Camera
+        startActivityForResult(intent, REQUEST_TAKEPICTURE);
+    }
+    private void crop(Uri photoUri) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setData(photoUri);
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, REQUEST_CROP);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if(requestCode == REQUEST_TAKEPICTURE){
+            if(resultCode == RESULT_OK) {
+                crop(mPictureUri);
+            }
+        }
+        if(requestCode == REQUEST_CROP && resultCode == RESULT_OK){
+            Toast.makeText(this, "Image crop", Toast.LENGTH_SHORT).show();
+        }
+    }
     class CardListPagerAdapter extends PagerAdapter{
         ArrayList<PlanInfo> planInfos = new ArrayList<PlanInfo>();
         public CardListPagerAdapter(){
@@ -179,18 +240,10 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
         public Object instantiateItem(ViewGroup container, int position) {
 //            return super.instantiateItem(container, position);
             PlanInfo planInfo = planInfos.get(position);
-            final View rootView = getLayoutInflater().inflate(R.layout.card_item, null);
-            int imgId = 0;
-            Random random = new Random();
-            int r = Global.random.nextInt(3);
-            if(r == 0)
-                imgId = R.drawable.cover1;
-            else if(r == 1)
-                imgId = R.drawable.cover2;
-            else
-                imgId = R.drawable.cover3;
+            final View rootView = getLayoutInflater().inflate(R.layout.plan_item, null);
 
-            setImageViewById(rootView, R.id.card_item_cover, imgId);
+
+            setImageViewById(rootView, R.id.card_item_cover, planInfo.getCoverUrl());
             setTextViewById(rootView, R.id.card_item_recodtime, new SimpleDateFormat("最后记录:yyyy-MM-dd").format(planInfo.getRecodDate()));
             setTextViewById(rootView, R.id.card_item_title, planInfo.title);
             setTextViewById(rootView, R.id.card_item_brief, String.format("已留下%d个努力瞬间", planInfo.tryTimes));

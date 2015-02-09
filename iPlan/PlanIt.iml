@@ -25,5 +25,6 @@
     <orderEntry type="library" scope="PROVIDED" name="android-support-v4" level="application" />
     <orderEntry type="module" module-name="PullZoomView_library" />
     <orderEntry type="library" name="android-support-v7-appcompat" level="application" />
+    <orderEntry type="module" module-name="FloatingActionButton_library" />
   </component>
 </module>

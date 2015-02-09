@@ -1,17 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:fab="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/common_bgcolor"
         >
     <include layout="@layout/common_title_bar_layout"/>
-    <com.ecloud.pulltozoomview.PullToZoomListViewEx
-            android:id="@+id/planlistview"
+    <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/title_nav_top"
-            app:headerView="@layout/plan_detail_head_view_layout"
-            app:zoomView="@layout/plan_detail_head_zoom_view" />
+            android:layout_height="match_parent">
+        <com.ecloud.pulltozoomview.PullToZoomListViewEx
+                android:id="@+id/planlistview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/title_nav_top"
+                app:headerView="@layout/plan_detail_head_view_layout"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="2.5dp"
+                android:scrollbars="none"
+                />
+        <!--app:zoomView="@layout/plan_detail_head_zoom_view"-->
+        <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/floatingBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_marginRight="29dp"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/stop_ic_camera"
+                fab:fab_shadow="false"
+                fab:fab_colorNormal="@android:color/transparent"
+                fab:fab_colorPressed="#AA888888"
+                fab:fab_colorRipple="#AA555555"/>
+    </FrameLayout>
 </LinearLayout>

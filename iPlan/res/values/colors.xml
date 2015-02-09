@@ -11,4 +11,8 @@
     <color name="nav_title_color">#fefefe</color>
     <!-- 是否私密愿望 -->
     <color name="secret_color">#32C6B6</color>
+
+    <color name="ripple">#ff80ab</color>
+    <color name="accent">#ff4081</color>
+    <color name="accent_pressed">#f50057</color>
 </resources>

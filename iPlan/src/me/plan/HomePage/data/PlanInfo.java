@@ -2,12 +2,16 @@ package me.plan.HomePage.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import me.plan.HomePage.data.element.SubPlanList;
+import me.plan.R;
+import me.plan.core.Global;
 import me.plan.core.TLog;
 
 import java.security.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * Created by tangb4c on 2015/2/1.
@@ -39,6 +43,17 @@ public class PlanInfo {
     public PlanInfo(){
 
     }
+    public int getCoverUrl(){
+        int imgId = 0;
+        int r = Global.random.nextInt(3);
+        if(r == 0)
+            imgId = R.drawable.cover1;
+        else if(r == 1)
+            imgId = R.drawable.cover2;
+        else
+            imgId = R.drawable.cover3;
+        return imgId;
+    }
     public int getPastDays(){
         Date now = Calendar.getInstance().getTime();
         long days = (now.getTime()/1000 - createTime)/86400;
@@ -52,5 +67,14 @@ public class PlanInfo {
         Date date = new Date(createTime * 1000L);
         TLog.i("date:%s createTime:%d", date, createTime);
         return date;
+    }
+
+    /**
+     * 返回记录日期
+     * @return ex: 2014-03-11
+     */
+    public String getRecordDateString() {
+        final SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
+        return sd.format(getRecodDate());
     }
 }
