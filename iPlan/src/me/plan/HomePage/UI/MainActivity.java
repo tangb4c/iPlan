@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
+import com.tencent.tauth.Tencent;
 import me.plan.HomePage.data.PlanInfo;
 import me.plan.HomePage.data.PlanListRsp;
 import me.plan.R;
@@ -59,6 +60,7 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         initData();
+
     }
 
     private void initData() {

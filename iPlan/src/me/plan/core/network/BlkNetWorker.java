@@ -22,6 +22,7 @@ public class BlkNetWorker {
     final String BASE_URL = "http://182.254.167.228";
     AsyncHttpClient client = new AsyncHttpClient();
     public void get(String relativeUrl, RequestParams params, TextHttpResponseHandler callback) {
+        params.add("version", "2.2.2");
         client.get(requestUrl(relativeUrl), params, callback);
     }
     String requestUrl(String relativeUrl) {
