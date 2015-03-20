@@ -16,9 +16,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="slidingmenu_library" />
-    <orderEntry type="module" module-name="CalendarPickerView" />
     <orderEntry type="module" module-name="android-async-http" />
+    <orderEntry type="module" module-name="CalendarPickerView" />
+    <orderEntry type="module" module-name="slidingmenu_library" />
     <orderEntry type="library" name="jackson-core-2.5.0" level="project" />
     <orderEntry type="library" name="jackson-databind-2.5.0" level="project" />
     <orderEntry type="library" name="jackson-annotations-2.5.0" level="project" />

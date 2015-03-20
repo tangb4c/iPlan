@@ -1,6 +1,7 @@
 package me.plan.core;
 
 /**
+ * 当前登录用户信息
  * Created by tangb4c on 2015/2/1.
  */
 public class LoginUser {
@@ -11,6 +12,15 @@ public class LoginUser {
     public static LoginUser g(){
         return g;
     }
+
+
+    /**
+     * 用户登录ID（后台对应是UID）
+     */
+    private String userId;
+    //登录态，会有过期的情况
+    private String ukey;
+
     public String getUserId() {
         return userId;
     }
@@ -19,6 +29,5 @@ public class LoginUser {
         this.userId = userId;
     }
 
-    private String userId;
 
 }
