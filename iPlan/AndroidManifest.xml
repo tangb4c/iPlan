@@ -51,5 +51,6 @@
         </activity>
         <activity android:name=".HomePage.UI.NewPlanDetailActivity"/>
         <activity android:name=".HomePage.UI.PlanDetailActivity"/>
+        <activity android:name=".HomePage.UI.LoginActivity"></activity>
     </application>
 </manifest>

@@ -18,6 +18,7 @@ public class LoginUser {
      * 用户登录ID（后台对应是UID）
      */
     private String userId;
+
     //登录态，会有过期的情况
     private String ukey;
 
@@ -27,6 +28,14 @@ public class LoginUser {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getUkey() {
+        return ukey;
+    }
+
+    public void setUkey(String ukey) {
+        this.ukey = ukey;
     }
 
 
