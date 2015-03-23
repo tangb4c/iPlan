@@ -50,9 +50,11 @@ public class LoginActivity extends CommonActivity {
             if (mTencent.isSessionValid()) {
                 ToastUtil.show(this, "登录成功");
                 QQToken qqToken = mTencent.getQQToken();
+                swapLoginToken();
             } else {
                 mTencent.login(this, "get_user_info", mLoginListener);
             }
+            isShowQQLogin = true;
         }
     }
 
@@ -71,7 +73,7 @@ public class LoginActivity extends CommonActivity {
         requestParams.add(ParamDef.OPENID, mTencent.getOpenId());
         requestParams.add(ParamDef.TOKEN, mTencent.getAccessToken());
         requestParams.put(ParamDef.LOGIN_TYPE, "qq");
-        BlkNetWorker.g().get(ParamDef.CMD_GET_UID, requestParams, new TextHttpResponseHandler() {
+        BlkNetWorker.g().get_with_notoken(ParamDef.CMD_GET_UID, requestParams, new TextHttpResponseHandler() {
             @Override
             public void onFailure(final int statusCode, final Header[] headers, final String responseString, final Throwable throwable) {
                 errLog("登录UID失败, %d %s", GlobalDef.ErrorCode.generateNetCode(statusCode), "网络问题");

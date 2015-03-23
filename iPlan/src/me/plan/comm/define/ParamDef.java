@@ -4,6 +4,8 @@ package me.plan.comm.define;
  * Created by tangb4c on 2015/2/1.
  */
 public class ParamDef {
+    public static final String VERSION = "version", VERSIONCODE = "2.2.2";
+    public static final String UID = "uid", UKEY = "ukey";
     public static final String CMD_NEW_PLAN = "superplan/plan/splan_plan_create.php",
             CMD_GET_PLAN_LIST = "superplan/plan/splan_plan_getlist.php";
     public static final String USERID = "id";

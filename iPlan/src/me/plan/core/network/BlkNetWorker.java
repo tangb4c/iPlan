@@ -4,6 +4,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
+import me.plan.comm.define.ParamDef;
+import me.plan.core.LoginUser;
 import me.plan.core.TLog;
 import org.json.JSONObject;
 
@@ -22,7 +24,20 @@ public class BlkNetWorker {
     final String BASE_URL = "http://182.254.167.228";
     AsyncHttpClient client = new AsyncHttpClient();
     public void get(String relativeUrl, RequestParams params, TextHttpResponseHandler callback) {
-        params.add("version", "2.2.2");
+        //公用参数，后台检查
+        params.add(ParamDef.VERSION, ParamDef.VERSIONCODE);
+        params.add(ParamDef.LOGIN_TYPE, "uid");
+        params.add(ParamDef.UID, LoginUser.g().getUserId());
+        params.add(ParamDef.UKEY, LoginUser.g().getUkey());
+        String reqUrl = requestUrl(relativeUrl);
+        TLog.i("request:%s?%s", reqUrl, params.toString());
+        client.get(requestUrl(relativeUrl), params, callback);
+    }
+
+    public void get_with_notoken(String relativeUrl, RequestParams params, TextHttpResponseHandler callback) {
+        params.add(ParamDef.VERSION, ParamDef.VERSIONCODE);
+        String reqUrl = requestUrl(relativeUrl);
+        TLog.i("request:%s?%s", reqUrl, params.toString());
         client.get(requestUrl(relativeUrl), params, callback);
     }
     String requestUrl(String relativeUrl) {

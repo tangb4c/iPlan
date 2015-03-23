@@ -43,7 +43,9 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
     ViewPager mCardListPager;
     CardListPagerAdapter mCardAdapter;
     Uri mPictureUri;
+    String mTakedPicturePath;
     boolean clicked = false;
+    private File tmp;
 
     /**
      * Called when the activity is first created.
@@ -51,6 +53,9 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.plan_main_list);
+        if (savedInstanceState != null) {
+            mTakedPicturePath = savedInstanceState.getString("mTakedPicturePath");
+        }
 //        Debug.waitForDebugger();
         initData();
         initUI();
@@ -61,6 +66,13 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
         super.onNewIntent(intent);
         initData();
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (!Utils.isEmpty(mTakedPicturePath))
+            outState.putString("mTakedPicturePath", mTakedPicturePath);
     }
 
     private void initData() {
@@ -78,7 +90,7 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
                 try {
 //                    Debug.waitForDebugger();
                     PlanListRsp rsp = Global.objectMapper.readValue(responseString, PlanListRsp.class);
-                    if(rsp.data == null)
+                    if (rsp.data == null)
                         mCardAdapter.planInfos.clear();
                     else
                         mCardAdapter.planInfos = rsp.data;
@@ -125,7 +137,7 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
             break;
         case R.id.camera:
             //gotoPlanDetail();
-            if(clicked)
+            if (clicked)
                 gotoPlanDetail();
             else
                 takePicture();
@@ -166,16 +178,17 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
 
         dialog.show();
     }
+
     private void photoPicker() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, 1);
     }
-    private void takePicture(){
-        final File dcim = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-        if(!dcim.exists()){
-            dcim.mkdirs();
-        }
+
+    /**
+     * 拍照
+     */
+    private void takePicture() {
 /*        SimpleDateFormat dateFormat = new SimpleDateFormat("iplan_yyyy_MM_dd.jpg");
         String imageFilePath = dcim.getAbsolutePath()+dateFormat.format(Calendar.getInstance());
         File file = new File(imageFilePath); //创建一个文件
@@ -192,11 +205,39 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
         mPictureUri = MainActivity.this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mPictureUri);
-//这样就将文件的存储方式和uri指定到了Camera应用中
-//由于我们需要调用完Camera后，可以返回Camera获取到的图片，
-//所以，我们使用startActivityForResult来启动Camera
+        TLog.i("extra_output:%s", mPictureUri.toString());
+        //这样就将文件的存储方式和uri指定到了Camera应用中
+        //由于我们需要调用完Camera后，可以返回Camera获取到的图片，
+        //所以，我们使用startActivityForResult来启动Camera
         startActivityForResult(intent, REQUEST_TAKEPICTURE);
     }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File tmpPhotoFile = null;
+            try {
+                tmpPhotoFile = createTmpFile();
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tmpPhotoFile));
+                startActivityForResult(takePictureIntent, REQUEST_TAKEPICTURE);
+            } catch (IOException e) {
+                TLog.e(e.toString());
+            }
+        } else {
+            errLog("手机里没有找到可用的拍照app");
+        }
+    }
+
+    private File createTmpFile() throws IOException {
+        SimpleDateFormat sp = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String fileName = "iplan_" + sp.format(new Date());
+        File storeDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        if (!storeDir.exists())
+            storeDir.mkdirs();
+        File tmp = File.createTempFile(fileName, ".jpg", storeDir);
+        return tmp;
+    }
+
     private void crop(Uri photoUri) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setData(photoUri);
@@ -205,28 +246,33 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
         intent.putExtra("return-data", true);
         startActivityForResult(intent, REQUEST_CROP);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-
-        if(requestCode == REQUEST_TAKEPICTURE){
-            if(resultCode == RESULT_OK) {
+        TLog.i("requestCode:%d resultCode:%d intent:%s", requestCode, resultCode, Utils.intentToString(intent));
+        //拍照返回
+        if (requestCode == REQUEST_TAKEPICTURE) {
+            if (resultCode == RESULT_OK) {
                 crop(mPictureUri);
             }
         }
-        if(requestCode == REQUEST_CROP && resultCode == RESULT_OK){
+        if (requestCode == REQUEST_CROP && resultCode == RESULT_OK) {
             Toast.makeText(this, "Image crop", Toast.LENGTH_SHORT).show();
         }
     }
-    class CardListPagerAdapter extends PagerAdapter{
+
+    class CardListPagerAdapter extends PagerAdapter {
         ArrayList<PlanInfo> planInfos = new ArrayList<PlanInfo>();
-        public CardListPagerAdapter(){
+
+        public CardListPagerAdapter() {
 //            TLog.tag();
 /*            for(int i = 0; i < 5; ++i){
                 PlanInfo planInfo = new PlanInfo();
                 planInfos.add(planInfo);
             }*/
         }
+
         @Override
         public int getCount() {
 //            TLog.i("planInfos null:%b", planInfos == null);
