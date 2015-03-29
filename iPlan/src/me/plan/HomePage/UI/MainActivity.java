@@ -1,7 +1,6 @@
 package me.plan.HomePage.UI;
 
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,11 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
-import com.tencent.tauth.Tencent;
-import me.plan.HomePage.data.PlanInfo;
+import com.soundcloud.android.crop.Crop;
+import me.plan.HomePage.business.HomePageBusiness;
+import me.plan.HomePage.data.element.PlanInfo;
 import me.plan.HomePage.data.PlanListRsp;
 import me.plan.R;
 import me.plan.comm.Utils;
@@ -31,10 +30,10 @@ import me.plan.core.network.BlkNetWorker;
 import org.apache.http.Header;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends CommonActivity implements View.OnClickListener {
@@ -42,9 +41,8 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
     NavMenuWidget mNavMenu;
     ViewPager mCardListPager;
     CardListPagerAdapter mCardAdapter;
-    Uri mPictureUri;
     String mTakedPicturePath;
-    boolean clicked = false;
+    Uri mOutputPicture;
     private File tmp;
 
     /**
@@ -136,12 +134,7 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
             showIcMoreDialog();
             break;
         case R.id.camera:
-            //gotoPlanDetail();
-            if (clicked)
-                gotoPlanDetail();
-            else
-                takePicture();
-            clicked = !clicked;
+            dispatchTakePictureIntent();
             break;
         default:
         }
@@ -188,36 +181,36 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
     /**
      * 拍照
      */
-    private void takePicture() {
-/*        SimpleDateFormat dateFormat = new SimpleDateFormat("iplan_yyyy_MM_dd.jpg");
-        String imageFilePath = dcim.getAbsolutePath()+dateFormat.format(Calendar.getInstance());
-        File file = new File(imageFilePath); //创建一个文件
-        Uri imageUri = Uri.fromFile(file);*/
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//这里我们插入一条数据，ContentValues是我们希望这条记录被创建时包含的数据信息
-//这些数据的名称已经作为常量在MediaStore.Images.Media中,有的存储在MediaStore.MediaColumn中了
-//ContentValues values = new ContentValues();
-        ContentValues values = new ContentValues(3);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
-        String fileName = "iplan_" + dateFormat.format(new Date()) + ".jpg";
-        values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
-        values.put(MediaStore.Images.Media.DESCRIPTION, "iplan app image");
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-        mPictureUri = MainActivity.this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, mPictureUri);
-        TLog.i("extra_output:%s", mPictureUri.toString());
-        //这样就将文件的存储方式和uri指定到了Camera应用中
-        //由于我们需要调用完Camera后，可以返回Camera获取到的图片，
-        //所以，我们使用startActivityForResult来启动Camera
-        startActivityForResult(intent, REQUEST_TAKEPICTURE);
-    }
-
+//    private void takePicture() {
+///*        SimpleDateFormat dateFormat = new SimpleDateFormat("iplan_yyyy_MM_dd.jpg");
+//        String imageFilePath = dcim.getAbsolutePath()+dateFormat.format(Calendar.getInstance());
+//        File file = new File(imageFilePath); //创建一个文件
+//        Uri imageUri = Uri.fromFile(file);*/
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+////这里我们插入一条数据，ContentValues是我们希望这条记录被创建时包含的数据信息
+////这些数据的名称已经作为常量在MediaStore.Images.Media中,有的存储在MediaStore.MediaColumn中了
+////ContentValues values = new ContentValues();
+//        ContentValues values = new ContentValues(3);
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
+//        String fileName = "iplan_" + dateFormat.format(new Date()) + ".jpg";
+//        values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+//        values.put(MediaStore.Images.Media.DESCRIPTION, "iplan app image");
+//        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+//        mPictureUri = MainActivity.this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, mPictureUri);
+//        TLog.i("extra_output:%s", mPictureUri.toString());
+//        //这样就将文件的存储方式和uri指定到了Camera应用中
+//        //由于我们需要调用完Camera后，可以返回Camera获取到的图片，
+//        //所以，我们使用startActivityForResult来启动Camera
+//        startActivityForResult(intent, REQUEST_TAKEPICTURE);
+//    }
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             File tmpPhotoFile = null;
             try {
-                tmpPhotoFile = createTmpFile();
+                tmpPhotoFile = createTmpFile("iplan_");
+                mTakedPicturePath = tmpPhotoFile.getAbsolutePath();
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tmpPhotoFile));
                 startActivityForResult(takePictureIntent, REQUEST_TAKEPICTURE);
             } catch (IOException e) {
@@ -228,9 +221,9 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
         }
     }
 
-    private File createTmpFile() throws IOException {
+    private File createTmpFile(final String prefix) throws IOException {
         SimpleDateFormat sp = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String fileName = "iplan_" + sp.format(new Date());
+        String fileName = prefix + sp.format(new Date());
         File storeDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         if (!storeDir.exists())
             storeDir.mkdirs();
@@ -239,12 +232,20 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
     }
 
     private void crop(Uri photoUri) {
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setData(photoUri);
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("return-data", true);
-        startActivityForResult(intent, REQUEST_CROP);
+//        Intent intent = new Intent("com.android.camera.action.CROP");
+//        intent.setData(photoUri);
+//        intent.putExtra("aspectX", 1);
+//        intent.putExtra("aspectY", 1);
+//        intent.putExtra("return-data", true);
+//        startActivityForResult(intent, REQUEST_CROP);
+        Crop crop = new Crop(photoUri);
+        try {
+            File outputCropFile = createTmpFile("iplan_cropped_");
+            mOutputPicture = Uri.fromFile(outputCropFile);
+            crop.output(mOutputPicture).asSquare().start(this);
+        } catch (IOException e) {
+            errLog("crop failed. %s", e.toString());
+        }
     }
 
     @Override
@@ -254,11 +255,20 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
         //拍照返回
         if (requestCode == REQUEST_TAKEPICTURE) {
             if (resultCode == RESULT_OK) {
-                crop(mPictureUri);
+                crop(Uri.parse(mTakedPicturePath));
             }
         }
-        if (requestCode == REQUEST_CROP && resultCode == RESULT_OK) {
-            Toast.makeText(this, "Image crop", Toast.LENGTH_SHORT).show();
+        //from android crop
+        if (requestCode == Crop.REQUEST_CROP && resultCode == RESULT_OK) {
+            appendPlan(mOutputPicture);
+        }
+    }
+
+    protected void appendPlan(Uri picUri) {
+        try {
+            HomePageBusiness.g().appendNewPlan("", "", picUri.getPath());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
