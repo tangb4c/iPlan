@@ -24,7 +24,12 @@ public class ParamDef {
     public static final String LOGIN_TYPE = "loginType",
             OPENID = "openid",
             TOKEN = "token";
-
+    public static final String CMD_UPLOAD_PIC = "superplan/pic/splan_pic_upload.php";
+    public static final String CMD_APPEND_FEED = "superplan/feeds/splan_feeds_create.php";
+    //picurl=pic54c11680890673.07817346&content=hello,content&planId=100003_1421940352
+    public static final String PICURL = "picurl",
+            CONTENT = "content",
+            PLANID = "planId";
     /**
      * const EnumPlanPrivatePublic = 0;
      * const EnumPlanPrivateSelf = 1;

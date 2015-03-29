@@ -1,20 +1,14 @@
 package me.plan.HomePage.adpater;
 
 import android.content.Context;
-import android.media.Image;
-import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
-import me.plan.HomePage.data.PlanInfo;
+import me.plan.HomePage.data.element.PlanInfo;
 import me.plan.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by tangb4c on 2015/2/8.

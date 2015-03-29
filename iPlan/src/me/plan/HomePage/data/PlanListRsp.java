@@ -1,5 +1,7 @@
 package me.plan.HomePage.data;
 
+import me.plan.HomePage.data.element.PlanInfo;
+
 import java.util.ArrayList;
 
 /**

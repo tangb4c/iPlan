@@ -35,7 +35,7 @@ public class Utils {
     }
 
     static public String intentToString(Intent intent) {
-        if (intent == null || intent.getExtras() == null)
+        if (intent == null ||  intent.getExtras() == null)
             return "null";
         final Bundle b = intent.getExtras();
         if (b != null && !b.isEmpty()) {

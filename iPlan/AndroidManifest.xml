@@ -36,7 +36,9 @@
                 android:theme="@android:style/Theme.Translucent.NoTitleBar"
                 android:configChanges="orientation|keyboardHidden|screenSize"/>
         <!--ＱＱ互联登录 end -->
-
+        <!-- android crop  -->
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+        <!-- end android crop -->
         <activity
                 android:name=".HomePage.UI.MainActivity"
                 android:label="@string/app_name">
