@@ -1,4 +1,4 @@
-package me.plan.HomePage.data;
+package me.plan.HomePage.data.element;
 
 /**
  * Created by blake on 3/22/15.
