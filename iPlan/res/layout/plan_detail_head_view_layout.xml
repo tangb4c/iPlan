@@ -7,6 +7,7 @@
               android:paddingLeft="22dp"
         >
     <TextView
+            android:id="@id/plan_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="爬一座山"
@@ -16,6 +17,7 @@
             android:layout_marginBottom="10dp"
             />
     <TextView
+            android:id="@+id/plan_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="你已经成功解锁X次"
@@ -34,9 +36,10 @@
                     android:src="@drawable/header_ic_time"
                     />
             <TextView
+                    android:id="@+id/plan_finish_days"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="21/60天"
+                    android:text="0/60天"
                     android:textSize="12dp"
                     />
             <ImageView
@@ -48,7 +51,7 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8831关注"
+                    android:text="0关注"
                     android:textSize="12dp"
                     />
         </LinearLayout>

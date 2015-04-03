@@ -68,7 +68,12 @@ public class PlanInfo {
         TLog.i("date:%s createTime:%d", date, createTime);
         return date;
     }
-
+    public class State{
+//        const EnumPlanStateIng = 0; //进行中
+//        const EnumPlanStateFinish = 1; //完成
+//        const EnumPlanStateFail = 2; //放弃
+        public static final int DOING = 0, FINISH = 1, DISCARD = 2;
+    }
     /**
      * 返回记录日期
      * @return ex: 2014-03-11

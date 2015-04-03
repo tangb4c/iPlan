@@ -1,6 +1,8 @@
 package me.plan.HomePage.UI;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import com.loopj.android.http.RequestParams;
@@ -12,6 +14,7 @@ import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 import me.plan.HomePage.data.GetUidRsp;
 import me.plan.R;
+import me.plan.comm.Utils;
 import me.plan.comm.base.CommonActivity;
 import me.plan.comm.define.GlobalDef;
 import me.plan.comm.define.ParamDef;
@@ -39,6 +42,8 @@ public class LoginActivity extends CommonActivity {
         if (mTencent == null) {
             TLog.e("mTencent is null");
             return;
+        }else{
+            loadQQToken();
         }
 
     }
@@ -49,7 +54,6 @@ public class LoginActivity extends CommonActivity {
         if (!isShowQQLogin) {
             if (mTencent.isSessionValid()) {
                 ToastUtil.show(this, "登录成功");
-                QQToken qqToken = mTencent.getQQToken();
                 swapLoginToken();
             } else {
                 mTencent.login(this, "get_user_info", mLoginListener);
@@ -77,6 +81,7 @@ public class LoginActivity extends CommonActivity {
             @Override
             public void onFailure(final int statusCode, final Header[] headers, final String responseString, final Throwable throwable) {
                 errLog("登录UID失败, %d %s", GlobalDef.ErrorCode.generateNetCode(statusCode), "网络问题");
+                setResult(RESULT_CANCELED);
                 finish();
             }
 
@@ -95,11 +100,13 @@ public class LoginActivity extends CommonActivity {
                         LoginUser.g().setUkey(rsp.data.ukey);
                         infoLog("登录成功");
                         TLog.i("uid:%s ukey:%s", rsp.data.uid, rsp.data.ukey);
+                        setResult(RESULT_OK);
                     }
                 } catch (IOException e) {
                     retcode = GlobalDef.ErrorCode.PARSE_JSON_FAILED;
                     errmsg = "协议解析失败";
                     TLog.e("ret:%d %s exception:%s", retcode, errmsg, e.toString());
+                    setResult(RESULT_CANCELED);
                 } finally {
                     finish();
                 }
@@ -119,11 +126,33 @@ public class LoginActivity extends CommonActivity {
                     && !TextUtils.isEmpty(openId)) {
                 mTencent.setAccessToken(token, expires);
                 mTencent.setOpenId(openId);
+                saveQQToken(openId, token, expires);
             }
             swapLoginToken();
         } catch (Exception e) {
             errLog("initOpenidFailed.%s", e);
             finish();
+        }
+    }
+    protected void saveQQToken(String openId, String token, String expiredTime) {
+        SharedPreferences sharedPreferences = getSharedPreferences(GlobalDef.SP.LOGIN, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(GlobalDef.LOGIN.OPENID, openId);
+        editor.putString(GlobalDef.LOGIN.QQTOKEN, token);
+        editor.putString(GlobalDef.LOGIN.EXPIREDTIME, expiredTime);
+        editor.apply();
+        TLog.e("%s %s %s", openId, token, expiredTime);
+    }
+    protected void loadQQToken(){
+        SharedPreferences sharedPreferences = getSharedPreferences(GlobalDef.SP.LOGIN, Context.MODE_PRIVATE);
+        final String openId = sharedPreferences.getString(GlobalDef.LOGIN.OPENID, "");
+        final String token = sharedPreferences.getString(GlobalDef.LOGIN.QQTOKEN, "");
+        final String expiredTime = sharedPreferences.getString(GlobalDef.LOGIN.EXPIREDTIME, "");
+
+        TLog.e("%s %s %s", openId, token, expiredTime);
+        if(Utils.isEmpty(openId) && !Utils.isEmpty(token) && !Utils.isEmpty(expiredTime)) {
+            mTencent.setOpenId(openId);
+            mTencent.setAccessToken(token, expiredTime);
         }
     }
     IUiListener mLoginListener = new IUiListener() {

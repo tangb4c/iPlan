@@ -22,6 +22,15 @@ public class LoginUser {
     //登录态，会有过期的情况
     private String ukey;
 
+    public boolean isHasLogined() {
+        return hasLogined;
+    }
+
+    public void setHasLogined(final boolean hasLogined) {
+        this.hasLogined = hasLogined;
+    }
+
+    private boolean hasLogined = false;
     public String getUserId() {
         return userId;
     }

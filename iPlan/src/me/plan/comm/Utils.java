@@ -4,6 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import me.plan.R;
 import me.plan.core.Global;
+import me.plan.core.TLog;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by tangb4c on 2015/1/25.
@@ -17,7 +21,8 @@ public class Utils {
     static public final int dimen2px(int dimenId) {
         return Global.getContext().getResources().getDimensionPixelSize(dimenId);
     }
-    static public boolean isEmpty(String str){
+
+    static public boolean isEmpty(String str) {
         return str == null || str.isEmpty();
     }
 
@@ -35,7 +40,7 @@ public class Utils {
     }
 
     static public String intentToString(Intent intent) {
-        if (intent == null ||  intent.getExtras() == null)
+        if (intent == null || intent.getExtras() == null)
             return "null";
         final Bundle b = intent.getExtras();
         if (b != null && !b.isEmpty()) {
@@ -45,5 +50,15 @@ public class Utils {
             return intent.toString();
         }
 
+    }
+
+    public static String getShortDate(int time) {
+        Date date = new Date(time * 1000L);
+        TLog.i("date:%s time:%d", date, time);
+        final SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
+        return sd.format(date);
+    }
+    public static int getTimeStamp(){
+        return (int)(new Date().getTime()/1000);
     }
 }

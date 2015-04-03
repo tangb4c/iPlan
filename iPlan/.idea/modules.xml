@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../android_crop_lib/AndroidCropLib.iml" filepath="$PROJECT_DIR$/../android_crop_lib/AndroidCropLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../AsyncImageAndroid/AsyncImage.iml" filepath="$PROJECT_DIR$/../AsyncImageAndroid/AsyncImage.iml" />
       <module fileurl="file://$PROJECT_DIR$/../CalendarPickerView_library/CalendarPickerView.iml" filepath="$PROJECT_DIR$/../CalendarPickerView_library/CalendarPickerView.iml" />
       <module fileurl="file://$PROJECT_DIR$/../FloatingActionButton_library/FloatingActionButton_library.iml" filepath="$PROJECT_DIR$/../FloatingActionButton_library/FloatingActionButton_library.iml" />
       <module fileurl="file://$PROJECT_DIR$/PlanIt.iml" filepath="$PROJECT_DIR$/PlanIt.iml" />

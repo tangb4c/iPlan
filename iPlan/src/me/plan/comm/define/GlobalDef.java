@@ -10,4 +10,16 @@ public class GlobalDef {
             return -8000 - Math.abs(statusCode);
         }
     }
+
+    public class SP {
+        public static final String LOGIN = "login";
+    }
+
+    public class LOGIN {
+        public static final String OPENID = "openid";
+
+        public static final String QQTOKEN = "qqtoken";
+
+        public static final String EXPIREDTIME = "expired_time";
+    }
 }

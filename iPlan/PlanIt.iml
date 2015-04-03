@@ -28,5 +28,6 @@
     <orderEntry type="module" module-name="FloatingActionButton_library" />
     <orderEntry type="library" name="open_sdk_r4547_lite" level="project" />
     <orderEntry type="module" module-name="AndroidCropLib" />
+    <orderEntry type="module" module-name="AsyncImage" />
   </component>
 </module>

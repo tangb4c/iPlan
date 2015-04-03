@@ -43,6 +43,7 @@ public class NewPlanDetailActivity extends CommonActivity implements View.OnClic
     AutoBgTextView mSecretPlan;
     TextView mPlanEndTime;
     Date mPlanEndDate = new Date();
+    boolean newPlanMode = true;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.newplan_detail_layout);
@@ -72,6 +73,9 @@ public class NewPlanDetailActivity extends CommonActivity implements View.OnClic
         // maxDate 最晚可选日期（不包含）
         // calender.init
         calendar.init(new Date(), new Date(), Locale.CHINA);*/
+        Intent intent = getIntent();
+        newPlanMode = intent.getIntExtra(CommConst.INTENT_PLAN_MODE, 0) != CommConst.INTENT_PLAN_MODE_MODIFY;
+
     }
 
     @Override
@@ -81,7 +85,10 @@ public class NewPlanDetailActivity extends CommonActivity implements View.OnClic
             finish();
             break;
         case R.id.right_btn:
-            submitNewPlan();
+            if(newPlanMode)
+                submitNewPlan();
+            else
+                updatePlan();
             break;
         case R.id.secret_plan:
             updateSecretStat();
@@ -90,6 +97,59 @@ public class NewPlanDetailActivity extends CommonActivity implements View.OnClic
             showDatePicker();
             break;
         }
+    }
+
+    private void updatePlan() {
+        Intent params = getIntent();
+        String id = params.getStringExtra(CommConst.INTENT_PLAN_ID);
+        String title = params.getStringExtra(CommConst.INTENT_PLAN_TITLE);
+        if(Utils.isEmpty(title)){
+            notifyMessage("获取愿望名字失败");
+            return;
+        }
+        RequestParams requestParams = new RequestParams();
+        requestParams.add(ParamDef.ID, id);
+        requestParams.add(ParamDef.OWNERID_STR, LoginUser.g().getUserId());
+        requestParams.add(ParamDef.PLAN_TITLE_STR, title);
+        requestParams.put(ParamDef.FINISH_DATE_INT, mPlanEndDate.getTime() / 1000);
+        requestParams.put(ParamDef.PRIVILEGE_INT, ParamDef.getPrililegeFlagBy(mSecretPlan.isSelected()));
+        requestParams.put(ParamDef.BACKGROUND_INDEX_INT, 0);
+        requestParams.put(ParamDef.SUBTASK_LIST, "[]");
+        BlkNetWorker.g().get(ParamDef.CMD_UPDATE_PLAN, requestParams, new TextHttpResponseHandler(){
+            @Override
+            public void onFailure(final int statusCode, final Header[] headers, final String responseString, final Throwable throwable) {
+                errLog("添加失败" + responseString);
+                dealByRetcode(GlobalDef.ErrorCode.generateNetCode(statusCode), "网络问题");
+                finish();
+            }
+
+            @Override
+            public void onSuccess(final int statusCode, final Header[] headers, final String responseString) {
+                int retcode = 0;
+                String errmsg;
+                try {
+                    BaseRsp rsp = Global.objectMapper.readValue(responseString, BaseRsp.class);
+                    retcode = rsp.ret;
+                    errmsg = rsp.msg;
+                } catch (IOException e) {
+                    retcode = GlobalDef.ErrorCode.PARSE_JSON_FAILED;
+                    errmsg = "协议解析失败";
+                    TLog.e(e.toString());
+                }
+                dealByRetcode(retcode, errmsg);
+                finish();
+            }
+
+            private void dealByRetcode(int retcode, String errmsg) {
+                if(retcode < 0){
+                    setResult(RESULT_CANCELED);
+                    errLog("添加失败 " + errmsg);
+                }else{
+                    infoLog("添加成功");
+                    setResult(RESULT_OK);
+                }
+            }
+        });
     }
 
     private void updateSecretStat() {

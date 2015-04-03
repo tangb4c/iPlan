@@ -1,12 +1,14 @@
 package me.plan.comm.base;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import me.plan.HomePage.UI.CommConst;
 import me.plan.R;
 import me.plan.comm.Widget.AutoBgButton;
 import me.plan.core.TLog;
@@ -36,9 +38,11 @@ public abstract class CommonActivity extends Activity {
         TextView x = (TextView) root.findViewById(resId);
         x.setText(txt);
     }
-    protected void setImageViewById(View root, int resId, int drawableId) {
+    protected void setImageViewById(View root, int resId, int drawableId, View.OnClickListener onClickListener) {
         ImageView x = (ImageView) root.findViewById(resId);
         x.setImageResource(drawableId);
+        if(onClickListener != null)
+            x.setOnClickListener(onClickListener);
     }
     protected void notifyMessage(String fmt, Object...args) {
         String msg = String.format(fmt, args);
@@ -51,5 +55,15 @@ public abstract class CommonActivity extends Activity {
     protected void infoLog(String fmt, Object... args) {
         TLog.i(fmt, args);
         notifyMessage(fmt, args);
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        if(requestCode == CommConst.REQUEST_QQ_LOGIN && resultCode == RESULT_OK){
+               onCreate(null);
+            TLog.i("CommConst.REQUEST_QQ_LOGIN. force refresh");
+        }else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

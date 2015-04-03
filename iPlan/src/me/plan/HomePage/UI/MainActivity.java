@@ -11,17 +11,21 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.soundcloud.android.crop.Crop;
 import me.plan.HomePage.business.HomePageBusiness;
+import me.plan.HomePage.data.BaseRsp;
 import me.plan.HomePage.data.element.PlanInfo;
 import me.plan.HomePage.data.PlanListRsp;
 import me.plan.R;
 import me.plan.comm.Utils;
 import me.plan.comm.Widget.AutoBgButton;
 import me.plan.comm.base.CommonActivity;
+import me.plan.comm.busi.OperationCallback;
 import me.plan.comm.define.ParamDef;
 import me.plan.core.Global;
 import me.plan.core.LoginUser;
@@ -42,8 +46,7 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
     ViewPager mCardListPager;
     CardListPagerAdapter mCardAdapter;
     String mTakedPicturePath;
-    Uri mOutputPicture;
-    private File tmp;
+    CameraTakePic mCameraTake;
 
     /**
      * Called when the activity is first created.
@@ -64,6 +67,16 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
         super.onNewIntent(intent);
         initData();
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!LoginUser.g().isHasLogined()) {
+            LoginUser.g().setHasLogined(true);
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivityForResult(intent, CommConst.REQUEST_QQ_LOGIN);
+        }
     }
 
     @Override
@@ -116,7 +129,6 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
         mCardListPager.setAdapter(mCardAdapter);
         mCardListPager.setOffscreenPageLimit(3);
         mCardListPager.setPageMargin(Utils.dimen2px(R.dimen.main_cardlist_gap));
-
         TextView camera = (TextView) findViewById(R.id.camera);
         camera.setOnClickListener(this);
     }
@@ -130,11 +142,17 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
         case R.id.right_btn:
             gotoAddPlan();
             break;
+        case R.id.card_item_cover:
+            gotoPlanDetail();
+            break;
         case R.id.btn_ic_more:
             showIcMoreDialog();
             break;
         case R.id.camera:
-            dispatchTakePictureIntent();
+            if (mCameraTake == null) {
+                mCameraTake = new CameraTakePic();
+            }
+            mCameraTake.dispatchTakePictureIntent(this, getCurrentPlanInfo(), null);
             break;
         default:
         }
@@ -142,6 +160,8 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
 
     private void gotoPlanDetail() {
         Intent intent = new Intent(this, PlanDetailActivity.class);
+        PlanInfo planInfo = getCurrentPlanInfo();
+        intent.putExtra(CommConst.INTENT_PLAN_ID, planInfo.id);
         startActivity(intent);
     }
 
@@ -165,10 +185,34 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
         dialogClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 dialog.dismiss();
             }
         });
-
+        View dialogEdit = dialog.findViewById(R.id.card_dialog_edit);
+        dialogEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NewPlanActivity.startPlanForResult(MainActivity.this, true, getCurrentPlanInfo());
+                dialog.dismiss();
+            }
+        });
+        View dialogFinish = dialog.findViewById(R.id.card_dialog_finish);
+        dialogFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomePageBusiness.g().changePlanState(getCurrentPlanInfo(), PlanInfo.State.FINISH, baseRspOperationCallback);
+                dialog.dismiss();
+            }
+        });
+        View dialogDiscard = dialog.findViewById(R.id.card_dialog_abandon);
+        dialogDiscard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomePageBusiness.g().changePlanState(getCurrentPlanInfo(), PlanInfo.State.DISCARD, baseRspOperationCallback);
+                dialog.dismiss();
+            }
+        });
         dialog.show();
     }
 
@@ -204,74 +248,29 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
 //        //所以，我们使用startActivityForResult来启动Camera
 //        startActivityForResult(intent, REQUEST_TAKEPICTURE);
 //    }
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File tmpPhotoFile = null;
-            try {
-                tmpPhotoFile = createTmpFile("iplan_");
-                mTakedPicturePath = tmpPhotoFile.getAbsolutePath();
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tmpPhotoFile));
-                startActivityForResult(takePictureIntent, REQUEST_TAKEPICTURE);
-            } catch (IOException e) {
-                TLog.e(e.toString());
-            }
-        } else {
-            errLog("手机里没有找到可用的拍照app");
-        }
-    }
-
-    private File createTmpFile(final String prefix) throws IOException {
-        SimpleDateFormat sp = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String fileName = prefix + sp.format(new Date());
-        File storeDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        if (!storeDir.exists())
-            storeDir.mkdirs();
-        File tmp = File.createTempFile(fileName, ".jpg", storeDir);
-        return tmp;
-    }
-
-    private void crop(Uri photoUri) {
-//        Intent intent = new Intent("com.android.camera.action.CROP");
-//        intent.setData(photoUri);
-//        intent.putExtra("aspectX", 1);
-//        intent.putExtra("aspectY", 1);
-//        intent.putExtra("return-data", true);
-//        startActivityForResult(intent, REQUEST_CROP);
-        Crop crop = new Crop(photoUri);
-        try {
-            File outputCropFile = createTmpFile("iplan_cropped_");
-            mOutputPicture = Uri.fromFile(outputCropFile);
-            crop.output(mOutputPicture).asSquare().start(this);
-        } catch (IOException e) {
-            errLog("crop failed. %s", e.toString());
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         TLog.i("requestCode:%d resultCode:%d intent:%s", requestCode, resultCode, Utils.intentToString(intent));
-        //拍照返回
-        if (requestCode == REQUEST_TAKEPICTURE) {
-            if (resultCode == RESULT_OK) {
-                crop(Uri.parse(mTakedPicturePath));
-            }
-        }
-        //from android crop
-        if (requestCode == Crop.REQUEST_CROP && resultCode == RESULT_OK) {
-            appendPlan(mOutputPicture);
+
+        if (mCameraTake != null)
+            mCameraTake.dealOnActivityResult(requestCode, resultCode, intent);
+        if(requestCode == CommConst.REQUEST_MODIFY_PLAN && resultCode == RESULT_OK){
+            onCreate(null);
         }
     }
 
-    protected void appendPlan(Uri picUri) {
-        try {
-            HomePageBusiness.g().appendNewPlan("", "", picUri.getPath());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    //TODO check exception for all
+    protected PlanInfo getCurrentPlanInfo() {
+        return mCardAdapter.getItem(mCardListPager.getCurrentItem());
     }
 
+    OperationCallback<BaseRsp> baseRspOperationCallback = new OperationCallback<BaseRsp>() {
+        @Override
+        public void onSucc(BaseRsp item) {
+            onCreate(null);
+        }
+    };
     class CardListPagerAdapter extends PagerAdapter {
         ArrayList<PlanInfo> planInfos = new ArrayList<PlanInfo>();
 
@@ -289,6 +288,10 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
             return planInfos.size();
         }
 
+        public PlanInfo getItem(int index) throws IndexOutOfBoundsException {
+            return planInfos.get(index);
+        }
+
         @Override
         public boolean isViewFromObject(View view, Object o) {
             return view == o;
@@ -301,7 +304,7 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
             final View rootView = getLayoutInflater().inflate(R.layout.plan_item, null);
 
 
-            setImageViewById(rootView, R.id.card_item_cover, planInfo.getCoverUrl());
+            setImageViewById(rootView, R.id.card_item_cover, planInfo.getCoverUrl(), MainActivity.this);
             setTextViewById(rootView, R.id.card_item_recodtime, new SimpleDateFormat("最后记录:yyyy-MM-dd").format(planInfo.getRecodDate()));
             setTextViewById(rootView, R.id.card_item_title, planInfo.title);
             setTextViewById(rootView, R.id.card_item_brief, String.format("已留下%d个努力瞬间", planInfo.tryTimes));

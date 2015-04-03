@@ -50,6 +50,6 @@ public class NavMenuWidget extends SlidingMenu implements View.OnClickListener {
 
     private void gotoLogin() {
         Intent intent = new Intent(activity, LoginActivity.class);
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent, CommConst.REQUEST_QQ_LOGIN);
     }
 }
